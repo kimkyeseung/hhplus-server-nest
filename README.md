@@ -2,6 +2,9 @@
 
 ---
 
+## 프로젝트 마일스톤
+- https://github.com/users/kimkyeseung/projects/4
+
 ## **사전 준비**
 
 - **Docker**와 **Docker Compose**가 설치되어 있어야 합니다.
