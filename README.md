@@ -3,6 +3,7 @@
 ---
 
 ## 프로젝트 마일스톤
+
 - https://github.com/users/kimkyeseung/projects/4
 
 ## **사전 준비**
@@ -62,22 +63,20 @@ erDiagram
         int id PK
         int price "가격"
         string seat_number "좌석번호"
+        int artist_id FK "아티스트"
         int stage_id FK "무대"
         int user_id FK "사용자 ID"
         string reservation_status "예약 상태"
     }
-    Checkout {
+    Order {
         int id PK
         int user_id FK "사용자 ID"
         int ticket_id FK "티켓 ID"
-    }
-    Order {
-        int id PK
-        int checkout_id FK "장바구니 ID"
         string status "주문 상태"
     }
     Payment {
         int id PK
+        int user_id FK "사용자 ID"
         int order_id FK "주문 ID"
         int ticket_id FK "티켓 ID"
         string status "결제 상태"
@@ -85,10 +84,11 @@ erDiagram
     }
     Ticket ||--o{ User: ""
     Stage ||--o{ Ticket: ""
-    Checkout ||--|| User: ""
-    Checkout ||--|| Ticket: ""
+    User ||--o{ Order: ""
+    User ||--o{ Payment: ""
+    Order ||--|| Ticket: ""
+    Artist ||--|| Ticket: ""
     Artist ||--o{ Stage : ""
-    Order ||--|| Checkout: ""
     Payment ||--|| Order: ""
     Payment ||--|| Ticket: ""
 
