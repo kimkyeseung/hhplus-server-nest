@@ -54,16 +54,21 @@ erDiagram
     Stage {
         int id PK
         string title
-        date start_date "공연 날짜/시간"
         string location "공연 장소"
-        number seat_count "좌석수"
         int artist_id FK "아티스트 ID"
+    }
+    Schedule {
+        int id PK
+        int stage_id FK "공연 ID"
+        int artist_id FK "공연 ID"
+        date datetime "공연 날짜/시각"
     }
     Ticket {
         int id PK
         int price "가격"
-        string seat_number "좌석번호"
-        int artist_id FK "아티스트"
+        int seat_number "좌석번호"
+        int schedule_id FK "공연 날짜/시각 ID"
+        int artist_id FK "아티스트 ID"
         int stage_id FK "무대"
         int user_id FK "사용자 ID"
         string reservation_status "예약 상태"
@@ -89,6 +94,9 @@ erDiagram
     Order ||--|| Ticket: ""
     Artist ||--|| Ticket: ""
     Artist ||--o{ Stage : ""
+    Artist ||--o{ Schedule : ""
+    Stage ||--o{ Schedule : ""
+    Ticket ||--|| Schedule : ""
     Payment ||--|| Order: ""
     Payment ||--|| Ticket: ""
 
