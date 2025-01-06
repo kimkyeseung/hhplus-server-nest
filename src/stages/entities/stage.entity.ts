@@ -1,9 +1,17 @@
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
+@Entity()
 export class Stage {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   title: string;
-  startDate: Date;
+
+  @Column()
   location: string;
-  seatCount: number;
-  availableSeats: string[];
-  artistId: number;
+
+  @ManyToOne(() => Artist, (artist) => artist.id)
+  artistId: Artist['id'];
 }
