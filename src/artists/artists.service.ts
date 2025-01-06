@@ -11,8 +11,9 @@ export class ArtistsService {
     private readonly artistRepository: Repository<Artist>,
   ) {}
 
-  create(createArtistDto: CreateArtistDto) {
+  async create(createArtistDto: CreateArtistDto) {
     const artist = this.artistRepository.create(createArtistDto);
+    await this.artistRepository.save(artist);
     return artist;
   }
 }
