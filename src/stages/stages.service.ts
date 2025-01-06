@@ -6,6 +6,7 @@ import { Stage } from './entities/stage.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artist } from 'src/artists/entities/artist.entity';
+import { Ticket } from 'src/tickets/entities/ticket.entity';
 
 @Injectable()
 export class StagesService {
@@ -15,10 +16,12 @@ export class StagesService {
     private readonly schedulesService: SchedulesService,
     @InjectRepository(Artist)
     private readonly artistRepository: Repository<Artist>,
+    @InjectRepository(Ticket)
+    private readonly ticketRepository: Repository<Ticket>,
   ) {}
 
   async create(createStageDto: CreateStageDto) {
-    const { dates, artistId } = createStageDto;
+    const { dates, artistId, price } = createStageDto;
 
     const artist = this.artistRepository.findOne({ where: { id: artistId } });
     if (!artist) {
@@ -27,6 +30,15 @@ export class StagesService {
 
     const stage = this.stageRepository.create(createStageDto);
     await this.stageRepository.save(stage);
+
+    const tickets = Array.from({ length: 50 }, (_, index) =>
+      this.ticketRepository.create({
+        seatNumber: index + 1,
+        stageId: stage.id,
+        price,
+      }),
+    );
+    await this.ticketRepository.save(tickets);
 
     this.schedulesService.create({
       dates,

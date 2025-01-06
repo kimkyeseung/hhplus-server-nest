@@ -3,4 +3,5 @@ export class CreateStageDto {
   location: string;
   artistId: number;
   dates: Date[];
+  price: number;
 }

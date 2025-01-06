@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Stage } from './entities/stage.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Artist } from 'src/artists/entities/artist.entity';
+import { Ticket } from 'src/tickets/entities/ticket.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Stage, Schedule, Artist])],
+  imports: [TypeOrmModule.forFeature([Stage, Schedule, Artist, Ticket])],
   controllers: [StagesController],
   providers: [StagesService, SchedulesService],
 })
