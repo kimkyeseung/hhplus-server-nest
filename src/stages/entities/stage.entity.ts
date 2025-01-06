@@ -1,5 +1,12 @@
 import { Artist } from 'src/artists/entities/artist.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Schedule } from 'src/schedules/entities/schedule.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class Stage {
@@ -14,4 +21,7 @@ export class Stage {
 
   @ManyToOne(() => Artist, (artist) => artist.id)
   artistId: Artist['id'];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.stageId)
+  schedules: Schedule[];
 }

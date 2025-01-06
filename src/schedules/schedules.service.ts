@@ -13,10 +13,10 @@ export class SchedulesService {
   ) {}
 
   create(createScheduleDto: CreateScheduleDto) {
-    const { schedules, artistId, stageId } = createScheduleDto;
+    const { dates, artistId, stageId } = createScheduleDto;
     const repository = this.scheduleRepository;
 
-    const result = schedules.map((date: Date) => {
+    const result = dates.map((date: Date) => {
       const schedule = repository.create({
         datetime: new Date(date),
         artistId,

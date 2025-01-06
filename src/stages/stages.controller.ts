@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { StagesService } from './stages.service';
 import { CreateStageDto } from './dto/create-stage.dto';
 import { UpdateStageDto } from './dto/update-stage.dto';
@@ -13,8 +22,8 @@ export class StagesController {
   }
 
   @Get()
-  findAll() {
-    return this.stagesService.findAll();
+  findAll(@Query('artistId') artistId?: number, @Query('date') date?: string) {
+    return this.stagesService.findAll(artistId, date);
   }
 
   @Get(':id')

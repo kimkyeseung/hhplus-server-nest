@@ -18,7 +18,7 @@ export class StagesService {
   ) {}
 
   async create(createStageDto: CreateStageDto) {
-    const { schedules, artistId } = createStageDto;
+    const { dates, artistId } = createStageDto;
 
     const artist = this.artistRepository.findOne({ where: { id: artistId } });
     if (!artist) {
@@ -29,7 +29,7 @@ export class StagesService {
     await this.stageRepository.save(stage);
 
     this.schedulesService.create({
-      schedules,
+      dates,
       artistId,
       stageId: stage.id,
     });
@@ -37,8 +37,21 @@ export class StagesService {
     return stage;
   }
 
-  findAll() {
-    return `This action returns all stages`;
+  findAll(artistId?: number, date?: string) {
+    const query = this.stageRepository
+      .createQueryBuilder('stage')
+      .leftJoinAndSelect('stage.artistId', 'artist')
+      .leftJoinAndSelect('stage.schedules', 'schedule');
+
+    if (artistId) {
+      query.andWhere('artist.id = :artistId', { artistId });
+    }
+
+    if (date) {
+      query.andWhere('DATE(schedule.datetime) = :date', { date });
+    }
+
+    return query.getMany();
   }
 
   findOne(id: number) {
