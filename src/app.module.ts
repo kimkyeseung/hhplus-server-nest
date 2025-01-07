@@ -6,6 +6,7 @@ import { StagesModule } from './stages/stages.module';
 import { ArtistsModule } from './artists/artists.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { TicketsModule } from './tickets/tickets.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TicketsModule } from './tickets/tickets.module';
     ArtistsModule,
     SchedulesModule,
     TicketsModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [],
