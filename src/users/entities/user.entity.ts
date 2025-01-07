@@ -1,9 +1,11 @@
+import { Queue } from 'src/queue/entities/queue.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -22,4 +24,7 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Queue, (queue) => queue.userId)
+  queues: Queue[];
 }

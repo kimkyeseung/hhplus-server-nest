@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { QueueService } from './queue.service';
-import { QueueController } from './queue.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Queue } from './entities/queue.entity';
 
 @Module({
-  controllers: [QueueController],
+  imports: [TypeOrmModule.forFeature([Queue])],
   providers: [QueueService],
 })
 export class QueueModule {}

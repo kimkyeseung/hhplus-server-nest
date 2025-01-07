@@ -63,6 +63,11 @@ erDiagram
         int artist_id FK "공연 ID"
         date datetime "공연 날짜/시각"
     }
+    Queue {
+        int id PK
+        int user_id FK "사용자 ID"
+        string status "상태('wait' | 'active')"
+    }
     Ticket {
         int id PK
         int price "가격"
@@ -91,6 +96,7 @@ erDiagram
     Stage ||--o{ Ticket: ""
     User ||--o{ Order: ""
     User ||--o{ Payment: ""
+    User ||--o{ Queue: ""
     Order ||--|| Ticket: ""
     Artist ||--|| Ticket: ""
     Artist ||--o{ Stage : ""

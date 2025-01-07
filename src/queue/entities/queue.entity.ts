@@ -1,18 +1,27 @@
-import { Artist } from 'src/artists/entities/artist.entity';
-import { Stage } from 'src/stages/entities/stage.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  Column,
+} from 'typeorm';
 
+export enum QueueStatus {
+  WAIT = 'wait',
+  ACTIVE = 'active',
+}
 @Entity()
 export class Queue {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Artist, (artist) => artist.id)
-  artistId: Artist['id'];
+  @ManyToOne(() => User, (user) => user.id)
+  userId: User['id'];
 
-  @ManyToOne(() => Stage, (stage) => stage.id)
-  stageId: Stage['id'];
+  @Column({ type: 'enum', enum: QueueStatus, default: QueueStatus.WAIT })
+  status: QueueStatus;
 
-  @Column()
-  datetime: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 }
