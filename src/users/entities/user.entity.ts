@@ -19,6 +19,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: 0 })
+  points: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

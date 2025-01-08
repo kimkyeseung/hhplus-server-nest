@@ -1,4 +1,4 @@
 export class CreateOrderDto {
-  usertId: number;
+  userId: number;
   ticketId: number;
 }

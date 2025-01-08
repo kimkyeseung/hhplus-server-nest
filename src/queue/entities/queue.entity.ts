@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   Column,
+  UpdateDateColumn,
 } from 'typeorm';
 
 export enum QueueStatus {
@@ -24,4 +25,10 @@ export class Queue {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Column({ type: 'timestamp', default: null })
+  expiresAt: Date;
 }

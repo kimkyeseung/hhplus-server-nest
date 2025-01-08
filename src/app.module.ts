@@ -8,6 +8,7 @@ import { SchedulesModule } from './schedules/schedules.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { QueueModule } from './queue/queue.module';
 import { OrdersModule } from './orders/orders.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { OrdersModule } from './orders/orders.module';
     TicketsModule,
     QueueModule,
     OrdersModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [],
