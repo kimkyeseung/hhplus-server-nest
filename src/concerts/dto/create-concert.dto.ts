@@ -1,4 +1,4 @@
-export class CreateStageDto {
+export class CreateConcertDto {
   title: string;
   location: string;
   artistId: number;

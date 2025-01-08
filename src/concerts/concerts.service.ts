@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateStageDto } from './dto/create-stage.dto';
-import { UpdateStageDto } from './dto/update-stage.dto';
+import { CreateConcertDto } from './dto/create-concert.dto';
+import { UpdateConcertDto } from './dto/update-concert.dto';
 import { SchedulesService } from 'src/schedules/schedules.service';
-import { Stage } from './entities/stage.entity';
+import { Concert } from './entities/concert.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Ticket } from 'src/tickets/entities/ticket.entity';
 
 @Injectable()
-export class StagesService {
+export class ConcertsService {
   constructor(
-    @InjectRepository(Stage)
-    private readonly stageRepository: Repository<Stage>,
+    @InjectRepository(Concert)
+    private readonly concertRepository: Repository<Concert>,
     private readonly schedulesService: SchedulesService,
     @InjectRepository(Artist)
     private readonly artistRepository: Repository<Artist>,
@@ -20,21 +20,21 @@ export class StagesService {
     private readonly ticketRepository: Repository<Ticket>,
   ) {}
 
-  async create(createStageDto: CreateStageDto) {
-    const { dates, artistId, price } = createStageDto;
+  async create(createConcertDto: CreateConcertDto) {
+    const { dates, artistId, price } = createConcertDto;
 
     const artist = this.artistRepository.findOne({ where: { id: artistId } });
     if (!artist) {
       throw NotFoundException;
     }
 
-    const stage = this.stageRepository.create(createStageDto);
-    await this.stageRepository.save(stage);
+    const concert = this.concertRepository.create(createConcertDto);
+    await this.concertRepository.save(concert);
 
     const tickets = Array.from({ length: 50 }, (_, index) =>
       this.ticketRepository.create({
         seatNumber: index + 1,
-        stageId: stage.id,
+        concertId: concert.id,
         price,
       }),
     );
@@ -43,17 +43,17 @@ export class StagesService {
     this.schedulesService.create({
       dates,
       artistId,
-      stageId: stage.id,
+      concertId: concert.id,
     });
 
-    return stage;
+    return concert;
   }
 
   findAll(artistId?: number, date?: string) {
-    const query = this.stageRepository
-      .createQueryBuilder('stage')
-      .leftJoinAndSelect('stage.artistId', 'artist')
-      .leftJoinAndSelect('stage.schedules', 'schedule');
+    const query = this.concertRepository
+      .createQueryBuilder('concert')
+      .leftJoinAndSelect('concert.artistId', 'artist')
+      .leftJoinAndSelect('concert.schedules', 'schedule');
 
     if (artistId) {
       query.andWhere('artist.id = :artistId', { artistId });
@@ -67,14 +67,14 @@ export class StagesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} stage`;
+    return `This action returns a #${id} concert`;
   }
 
-  update(id: number, updateStageDto: UpdateStageDto) {
-    return `This action updates a #${id} stage`;
+  update(id: number, updateConcertDto: UpdateConcertDto) {
+    return `This action updates a #${id} concert`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} stage`;
+    return `This action removes a #${id} concert`;
   }
 }

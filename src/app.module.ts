@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
-import { StagesModule } from './stages/stages.module';
+import { ConcertsModule } from './concerts/concerts.module';
 import { ArtistsModule } from './artists/artists.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { TicketsModule } from './tickets/tickets.module';
@@ -13,7 +13,7 @@ import { OrdersModule } from './orders/orders.module';
   imports: [
     DatabaseModule,
     UsersModule,
-    StagesModule,
+    ConcertsModule,
     ArtistsModule,
     SchedulesModule,
     TicketsModule,

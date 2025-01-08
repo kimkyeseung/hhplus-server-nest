@@ -51,7 +51,7 @@ erDiagram
         int id PK
         string name "아티스트 이름"
     }
-    Stage {
+    Concert {
         int id PK
         string title
         string location "공연 장소"
@@ -93,15 +93,15 @@ erDiagram
         string method "결제 방법"
     }
     Ticket ||--o{ User: ""
-    Stage ||--o{ Ticket: ""
+    Concert ||--o{ Ticket: ""
     User ||--o{ Order: ""
     User ||--o{ Payment: ""
     User ||--o{ Queue: ""
     Order ||--|| Ticket: ""
     Artist ||--|| Ticket: ""
-    Artist ||--o{ Stage : ""
+    Artist ||--o{ Concert : ""
     Artist ||--o{ Schedule : ""
-    Stage ||--o{ Schedule : ""
+    Concert ||--o{ Schedule : ""
     Ticket ||--|| Schedule : ""
     Payment ||--|| Order: ""
     Payment ||--|| Ticket: ""

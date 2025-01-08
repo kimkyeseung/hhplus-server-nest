@@ -1,4 +1,4 @@
-import { Stage } from 'src/stages/entities/stage.entity';
+import { Concert } from 'src/concerts/entities/concert.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 type ReservationStatus = 'pending' | 'canceled' | 'success' | 'failed';
@@ -17,6 +17,6 @@ export class Ticket {
   @Column({ default: 'pending' })
   reservationStatus: ReservationStatus;
 
-  @ManyToOne(() => Stage, (stage) => stage.id)
-  stageId: Stage['id'];
+  @ManyToOne(() => Concert, (concert) => concert.id)
+  concertId: Concert['id'];
 }

@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Stage {
+export class Concert {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,6 +22,6 @@ export class Stage {
   @ManyToOne(() => Artist, (artist) => artist.id)
   artistId: Artist['id'];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.stageId)
+  @OneToMany(() => Schedule, (schedule) => schedule.concertId)
   schedules: Schedule[];
 }

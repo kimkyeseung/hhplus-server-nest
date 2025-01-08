@@ -13,14 +13,14 @@ export class SchedulesService {
   ) {}
 
   create(createScheduleDto: CreateScheduleDto) {
-    const { dates, artistId, stageId } = createScheduleDto;
+    const { dates, artistId, concertId } = createScheduleDto;
     const repository = this.scheduleRepository;
 
     const result = dates.map((date: Date) => {
       const schedule = repository.create({
         datetime: new Date(date),
         artistId,
-        stageId,
+        concertId,
       });
       this.scheduleRepository.save(schedule);
       return schedule;
