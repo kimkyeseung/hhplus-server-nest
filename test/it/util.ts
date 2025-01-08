@@ -16,7 +16,7 @@ export const getDatasource = async () => {
     password: process.env.DB_PASSWORD,
     migrations: [`migrations/*`],
     logging: true,
-    entities: [`**/*.entity.ts`],
+    entities: ['<rootDir>/src/**/*.entity.{ts,js}'],
     relationLoadStrategy: 'join',
   });
   await datasource.initialize();
