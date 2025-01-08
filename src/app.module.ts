@@ -7,6 +7,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { QueueModule } from './queue/queue.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { QueueModule } from './queue/queue.module';
     SchedulesModule,
     TicketsModule,
     QueueModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [],
