@@ -12,6 +12,6 @@ export class ScheduleRepository extends Repository<Schedule> {
   async findSchedulesByArtist(
     artistId: FindOptionsWhere<Artist['id']>,
   ): Promise<Schedule[]> {
-    return this.find({ where: { artistId } });
+    return this.find({ where: { artist: artistId } });
   }
 }

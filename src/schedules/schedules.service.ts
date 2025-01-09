@@ -19,8 +19,8 @@ export class SchedulesService {
     const result = dates.map((date: Date) => {
       const schedule = repository.create({
         datetime: new Date(date),
-        artistId,
-        concertId,
+        artist: artistId,
+        concert: concertId,
       });
       this.scheduleRepository.save(schedule);
       return schedule;

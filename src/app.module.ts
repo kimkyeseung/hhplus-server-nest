@@ -22,7 +22,7 @@ import { PointHistoryModule } from './point-history/point-history.module';
     TicketsModule,
     QueueModule,
     OrdersModule,
-    ScheduleModule,
+    ScheduleModule.forRoot(),
     PointModule,
     PointHistoryModule,
   ],

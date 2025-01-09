@@ -16,4 +16,9 @@ export class ArtistsService {
     await this.artistRepository.save(artist);
     return artist;
   }
+
+  findAll() {
+    const artists = this.artistRepository.find();
+    return artists;
+  }
 }

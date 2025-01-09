@@ -28,6 +28,6 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Queue, (queue) => queue.userId)
+  @OneToMany(() => Queue, (queue) => queue.user)
   queues: Queue[];
 }

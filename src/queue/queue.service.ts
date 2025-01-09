@@ -15,7 +15,7 @@ export class QueueService {
 
   async addToQueue(userId: number): Promise<Queue> {
     const newQueueItem = this.queueRepository.create({
-      userId,
+      user: userId,
       status: QueueStatus.WAIT,
     });
 
@@ -69,7 +69,7 @@ export class QueueService {
     numberOfUsersAhead: number | null;
   }> {
     const queue = await this.queueRepository.findOne({
-      where: { userId },
+      where: { user: userId },
     });
 
     if (!queue) {
@@ -89,7 +89,7 @@ export class QueueService {
       order: { createdAt: 'ASC' },
     });
 
-    const userIndex = allQueues.findIndex((q) => q.userId === userId);
+    const userIndex = allQueues.findIndex((q) => q.user === userId);
 
     if (userIndex === -1) {
       throw new Error('User not found in the WAIT queue');
@@ -123,7 +123,7 @@ export class QueueService {
 
   async getQueue(userId: number): Promise<Queue> | null {
     return await this.queueRepository.findOneBy({
-      userId,
+      user: userId,
     });
   }
 }

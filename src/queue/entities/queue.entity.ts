@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Column,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 
 export enum QueueStatus {
@@ -17,8 +18,9 @@ export class Queue {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
-  userId: User['id'];
+  @ManyToOne(() => User)
+  @JoinColumn()
+  user: User['id'];
 
   @Column({ type: 'enum', enum: QueueStatus, default: QueueStatus.WAIT })
   status: QueueStatus;
@@ -29,6 +31,6 @@ export class Queue {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ type: 'timestamp', default: null })
+  @Column({ type: 'timestamp', nullable: true })
   expiresAt: Date;
 }

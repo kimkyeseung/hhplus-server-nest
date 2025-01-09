@@ -8,6 +8,7 @@ import {
   OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 
 export enum OrderStatus {
@@ -23,10 +24,12 @@ export class Order {
   id: number;
 
   @ManyToOne(() => User, (user) => user.id)
-  userId: User['id'];
+  @JoinColumn()
+  user: User;
 
   @OneToOne(() => Ticket, (ticket) => ticket.id)
-  ticketId: Ticket['id'];
+  @JoinColumn()
+  ticket: Ticket;
 
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
   status: OrderStatus;

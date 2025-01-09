@@ -34,7 +34,7 @@ export class ConcertsService {
     const tickets = Array.from({ length: 50 }, (_, index) =>
       this.ticketRepository.create({
         seatNumber: index + 1,
-        concertId: concert.id,
+        concert,
         price,
       }),
     );

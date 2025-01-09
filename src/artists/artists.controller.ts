@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 
@@ -9,5 +9,10 @@ export class ArtistsController {
   @Post()
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.artistsService.findAll();
   }
 }

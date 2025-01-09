@@ -1,17 +1,25 @@
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Concert } from 'src/concerts/entities/concert.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Schedule {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Artist, (artist) => artist.id)
-  artistId: Artist['id'];
+  @ManyToOne(() => Artist)
+  @JoinColumn()
+  artist: Artist['id'];
 
-  @ManyToOne(() => Concert, (concert) => concert.id)
-  concertId: Concert['id'];
+  @ManyToOne(() => Concert)
+  @JoinColumn()
+  concert: Concert['id'];
 
   @Column()
   datetime: Date;

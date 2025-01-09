@@ -4,8 +4,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -22,6 +22,6 @@ export class Concert {
   @ManyToOne(() => Artist, (artist) => artist.id)
   artistId: Artist['id'];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.concertId)
+  @OneToMany(() => Schedule, (schedule) => schedule.concert)
   schedules: Schedule[];
 }

@@ -1,7 +1,18 @@
 import { Concert } from 'src/concerts/entities/concert.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-type ReservationStatus = 'pending' | 'canceled' | 'success' | 'failed';
+export enum ReservationStatus {
+  PENDING = 'pending',
+  CANCELED = 'canceled',
+  SUCCESS = 'success',
+  FAILED = 'failed',
+}
 
 @Entity()
 export class Ticket {
@@ -14,9 +25,14 @@ export class Ticket {
   @Column()
   seatNumber: number;
 
-  @Column({ default: 'pending' })
+  @Column({
+    type: 'enum',
+    enum: ReservationStatus,
+    default: ReservationStatus.PENDING,
+  })
   reservationStatus: ReservationStatus;
 
   @ManyToOne(() => Concert, (concert) => concert.id)
-  concertId: Concert['id'];
+  @JoinColumn()
+  concert: Concert;
 }
