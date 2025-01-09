@@ -78,6 +78,18 @@ erDiagram
         int user_id FK "사용자 ID"
         string reservation_status "예약 상태"
     }
+    Point {
+        int id PK
+        int user_id FK "사용자 ID"
+        int balance "포인트 잔액"
+    }
+    PointHistory {
+        int id PK
+        int point_id FK "포인트 ID"
+        int user_id FK "사용자 ID"
+        string type "사용 유형('payment' | 'charge')"
+        int balance "포인트 잔액"
+    }
     Order {
         int id PK
         int user_id FK "사용자 ID"
@@ -105,6 +117,9 @@ erDiagram
     Ticket ||--|| Schedule : ""
     Payment ||--|| Order: ""
     Payment ||--|| Ticket: ""
+    Point ||--|| User: ""
+    Point ||--o{ PointHistory : ""
+    User ||--o{ PointHistory : ""
 
 ```
 
