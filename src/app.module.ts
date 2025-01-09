@@ -9,8 +9,7 @@ import { TicketsModule } from './tickets/tickets.module';
 import { QueueModule } from './queue/queue.module';
 import { OrdersModule } from './orders/orders.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { PointModule } from './point/point.module';
-import { PointHistoryModule } from './point-history/point-history.module';
+import { PointModule } from './points/points.module';
 
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { PointHistoryModule } from './point-history/point-history.module';
     OrdersModule,
     ScheduleModule.forRoot(),
     PointModule,
-    PointHistoryModule,
   ],
   controllers: [AppController],
   providers: [],

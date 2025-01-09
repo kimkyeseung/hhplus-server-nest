@@ -1,3 +1,4 @@
+import { Point } from 'src/points/entities/point.entity';
 import { Queue } from 'src/queue/entities/queue.entity';
 import {
   Entity,
@@ -6,6 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -19,8 +22,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ default: 0 })
-  points: number;
+  @OneToOne(() => Point, (point) => point.user, { cascade: true })
+  @JoinColumn()
+  point: Point;
 
   @CreateDateColumn()
   createdAt: Date;
