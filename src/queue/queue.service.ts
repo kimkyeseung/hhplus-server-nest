@@ -121,9 +121,21 @@ export class QueueService {
     );
   }
 
-  async getQueue(userId: number): Promise<Queue> | null {
+  async getQueue(userId: number): Promise<Queue | null> {
     return await this.queueRepository.findOneBy({
       user: userId,
     });
+  }
+
+  async expireToken(userId: number): Promise<void> {
+    const queue = await this.queueRepository.findOne({
+      where: { user: userId },
+    });
+
+    if (!queue) {
+      throw new Error('User not found in the queue');
+    }
+
+    await this.queueRepository.remove(queue); // 대기열에서 제거
   }
 }
