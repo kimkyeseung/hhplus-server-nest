@@ -1,5 +1,5 @@
-import { Point } from 'src/points/entities/point.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Point } from '../../../src/points/entities/point.entity';
+import { User } from '../../../src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

@@ -1,5 +1,5 @@
-import { Point } from 'src/points/entities/point.entity';
-import { Queue } from 'src/queue/entities/queue.entity';
+import { Point } from '../../../src/points/entities/point.entity';
+import { Queue } from '../../../src/queue/entities/queue.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

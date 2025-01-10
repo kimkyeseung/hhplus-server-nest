@@ -6,5 +6,6 @@ import { Queue } from './entities/queue.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Queue])],
   providers: [QueueService],
+  exports: [QueueService],
 })
 export class QueueModule {}
