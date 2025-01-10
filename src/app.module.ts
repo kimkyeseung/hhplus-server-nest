@@ -10,6 +10,8 @@ import { QueueModule } from './queue/queue.module';
 import { OrdersModule } from './orders/orders.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PointModule } from './points/points.module';
+import { ReservationModule } from './reservation/reservation.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { PointModule } from './points/points.module';
     OrdersModule,
     ScheduleModule.forRoot(),
     PointModule,
+    ReservationModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [],
