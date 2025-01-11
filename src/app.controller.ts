@@ -13,10 +13,10 @@ export class AppController {
   }
 
   // 2. 예약 가능 날짜 / 좌석 API
-  @Get('stages/:stageId/availability')
-  getStageAvailability(@Param('stageId') stageId: number) {
+  @Get('concerts/:concertId/availability')
+  getConcertAvailability(@Param('concertId') concertId: number) {
     return {
-      stageId,
+      concertId,
       title: '싸이의 50명 흠뻑쇼',
       startDate: '2025-01-20T19:00:00Z',
       location: '서울대공원',
@@ -28,15 +28,15 @@ export class AppController {
   // 3. 좌석 예약 요청 API
   @Post('tickets/reserve')
   reserveTicket(
-    @Body() body: { userId: number; stageId: number; seatNumber: string },
+    @Body() body: { userId: number; concertId: number; seatNumber: string },
   ) {
-    const { userId, stageId, seatNumber } = body;
+    const { userId, concertId, seatNumber } = body;
     return {
       success: true,
       ticketId: 101,
       reservationStatus: 'reserved',
       seatNumber,
-      stageId,
+      concertId,
       userId,
     };
   }

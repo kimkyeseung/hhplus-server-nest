@@ -51,22 +51,44 @@ erDiagram
         int id PK
         string name "아티스트 이름"
     }
-    Stage {
+    Concert {
         int id PK
         string title
-        date start_date "공연 날짜/시간"
         string location "공연 장소"
-        number seat_count "좌석수"
         int artist_id FK "아티스트 ID"
+    }
+    Schedule {
+        int id PK
+        int stage_id FK "공연 ID"
+        int artist_id FK "공연 ID"
+        date datetime "공연 날짜/시각"
+    }
+    Queue {
+        int id PK
+        int user_id FK "사용자 ID"
+        string status "상태('wait' | 'active')"
     }
     Ticket {
         int id PK
         int price "가격"
-        string seat_number "좌석번호"
-        int artist_id FK "아티스트"
+        int seat_number "좌석번호"
+        int schedule_id FK "공연 날짜/시각 ID"
+        int artist_id FK "아티스트 ID"
         int stage_id FK "무대"
         int user_id FK "사용자 ID"
         string reservation_status "예약 상태"
+    }
+    Point {
+        int id PK
+        int user_id FK "사용자 ID"
+        int balance "포인트 잔액"
+    }
+    PointHistory {
+        int id PK
+        int point_id FK "포인트 ID"
+        int user_id FK "사용자 ID"
+        string type "사용 유형('payment' | 'charge')"
+        int balance "포인트 잔액"
     }
     Order {
         int id PK
@@ -83,14 +105,21 @@ erDiagram
         string method "결제 방법"
     }
     Ticket ||--o{ User: ""
-    Stage ||--o{ Ticket: ""
+    Concert ||--o{ Ticket: ""
     User ||--o{ Order: ""
     User ||--o{ Payment: ""
+    User ||--o{ Queue: ""
     Order ||--|| Ticket: ""
     Artist ||--|| Ticket: ""
-    Artist ||--o{ Stage : ""
+    Artist ||--o{ Concert : ""
+    Artist ||--o{ Schedule : ""
+    Concert ||--o{ Schedule : ""
+    Ticket ||--|| Schedule : ""
     Payment ||--|| Order: ""
     Payment ||--|| Ticket: ""
+    Point ||--|| User: ""
+    Point ||--o{ PointHistory : ""
+    User ||--o{ PointHistory : ""
 
 ```
 
