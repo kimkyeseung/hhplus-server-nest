@@ -1,5 +1,5 @@
-import { Ticket } from 'src/tickets/entities/ticket.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Ticket } from '../../../src/tickets/entities/ticket.entity';
+import { User } from '../../../src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

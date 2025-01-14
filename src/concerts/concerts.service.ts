@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConcertDto } from './dto/create-concert.dto';
 import { UpdateConcertDto } from './dto/update-concert.dto';
-import { SchedulesService } from 'src/schedules/schedules.service';
+import { SchedulesService } from '../../src/schedules/schedules.service';
 import { Concert } from './entities/concert.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Artist } from 'src/artists/entities/artist.entity';
-import { Ticket } from 'src/tickets/entities/ticket.entity';
+import { Artist } from '../../src/artists/entities/artist.entity';
+import { Ticket } from '../../src/tickets/entities/ticket.entity';
 
 @Injectable()
 export class ConcertsService {

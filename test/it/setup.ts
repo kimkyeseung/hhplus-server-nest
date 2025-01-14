@@ -4,7 +4,7 @@ import { MySqlContainer } from '@testcontainers/mysql';
 import { getDatasource } from './util';
 
 const init = async () => {
-  await Promise.all([initMysql()]);
+  await Promise.all([await initMysql()]);
 };
 
 const initMysql = async () => {

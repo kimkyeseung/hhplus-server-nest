@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:it": "jest --config ./test/it/it.jest.json"
+    "test:it": "jest --config ./test/it/it.jest.json",
+    "test:detect": "jest --detectOpenHandles"
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",

@@ -1,4 +1,4 @@
-import { Concert } from 'src/concerts/entities/concert.entity';
+import { Concert } from '../../../src/concerts/entities/concert.entity';
 import {
   Column,
   Entity,

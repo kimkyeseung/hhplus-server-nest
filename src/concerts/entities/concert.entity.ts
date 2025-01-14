@@ -1,5 +1,5 @@
-import { Artist } from 'src/artists/entities/artist.entity';
-import { Schedule } from 'src/schedules/entities/schedule.entity';
+import { Artist } from '../../../src/artists/entities/artist.entity';
+import { Schedule } from '../../../src/schedules/entities/schedule.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

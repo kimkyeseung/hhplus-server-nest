@@ -1,5 +1,5 @@
-import { Artist } from 'src/artists/entities/artist.entity';
-import { Concert } from 'src/concerts/entities/concert.entity';
+import { Artist } from '../../../src/artists/entities/artist.entity';
+import { Concert } from '../../../src/concerts/entities/concert.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
