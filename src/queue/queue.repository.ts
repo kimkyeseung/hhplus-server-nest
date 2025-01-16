@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Queue } from './entities/queue.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class QueueRepository extends Repository<Queue> {
-  constructor(private readonly dataSource: DataSource) {
-    super(Queue, dataSource.createEntityManager());
+  constructor(
+    @InjectRepository(Queue)
+    repository: Repository<Queue>,
+  ) {
+    super(repository.target, repository.manager, repository.queryRunner);
   }
 }
