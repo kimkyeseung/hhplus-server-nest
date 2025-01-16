@@ -84,18 +84,29 @@ export class ReservationService {
     );
   }
 
-  private cleanupExpiredReservations(date: string): void {
+  public cleanupExpiredReservations(date: string): void {
     const now = new Date();
 
-    this.seatReservations[date].forEach((seat) => {
+    if (!this.seatReservations[date]) {
+      throw new HttpException(
+        'Invalid date or no reservations available',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    this.seatReservations[date] = this.seatReservations[date].map((seat) => {
       if (
         seat.status === 'reserved' &&
         seat.reservedUntil &&
         now > seat.reservedUntil
       ) {
-        seat.status = 'available';
-        seat.reservedUntil = undefined;
+        return {
+          ...seat,
+          status: 'available',
+          reservedUntil: undefined,
+        };
       }
+      return seat;
     });
   }
 }

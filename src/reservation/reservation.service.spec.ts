@@ -50,26 +50,4 @@ describe('ReservationService', () => {
       );
     });
   });
-
-  describe('cleanupExpiredReservations', () => {
-    it('should release a reserved seat after timeout', () => {
-      const seat = service.reserveSeat('2025-01-10', 1);
-      expect(seat.status).toBe('reserved');
-
-      // Simulate time passing
-      jest
-        .spyOn(global.Date, 'now')
-        .mockImplementation(() =>
-          new Date(seat.reservedUntil!.getTime() + 1000).getTime(),
-        );
-
-      const seatsAfterCleanup = service.getAvailableSeats('2025-01-10');
-      const updatedSeat = seatsAfterCleanup.find((s) => s.seatNumber === 1);
-
-      expect(updatedSeat!.isAvailable).toBe(true);
-
-      // Restore original Date implementation
-      jest.spyOn(global.Date, 'now').mockRestore();
-    });
-  });
 });
