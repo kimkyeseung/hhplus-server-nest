@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { ApiException } from 'src/common/exceptions/api-exception';
-import { ApiErrors } from 'src/common/errors/api-errors';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class UsersService {

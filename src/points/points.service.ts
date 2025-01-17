@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Point } from './entities/point.entity';
 import {
@@ -6,8 +6,8 @@ import {
   PointHistoryType,
 } from './entities/point-history.entity';
 import { Repository } from 'typeorm';
-import { ApiException } from 'src/common/exceptions/api-exception';
-import { ApiErrors } from 'src/common/errors/api-errors';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class PointsService {

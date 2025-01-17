@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ReservationService } from '../reservation/reservation.service';
 import { QueueService } from '../queue/queue.service';
 import { ApiException } from '../common/exceptions/api-exception';

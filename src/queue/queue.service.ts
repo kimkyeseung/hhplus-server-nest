@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { Repository, LessThan } from 'typeorm';
-import { ApiException } from 'src/common/exceptions/api-exception';
-import { ApiErrors } from 'src/common/errors/api-errors';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class QueueService {
