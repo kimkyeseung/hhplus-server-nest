@@ -1,4 +1,6 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ApiErrors } from '../../src/common/errors/api-errors';
+import { ApiException } from '../../src/common/exceptions/api-exception';
 
 export interface SeatReservation {
   seatNumber: number;
@@ -20,10 +22,7 @@ export class ReservationService {
     date: string,
   ): { seatNumber: number; isAvailable: boolean }[] {
     if (!this.availableDates.includes(date)) {
-      throw new HttpException(
-        'Invalid date or no reservations available for this date',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new ApiException(ApiErrors.Reservations.SeatUnavailable);
     }
 
     if (!this.seatReservations[date]) {
@@ -40,10 +39,7 @@ export class ReservationService {
 
   reserveSeat(date: string, seatNumber: number): SeatReservation {
     if (!this.availableDates.includes(date)) {
-      throw new HttpException(
-        'Invalid reservation date',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new ApiException(ApiErrors.Reservations.DateUnavailable);
     }
 
     if (!this.seatReservations[date]) {
@@ -57,7 +53,7 @@ export class ReservationService {
     );
 
     if (!seat) {
-      throw new HttpException('Invalid seat number', HttpStatus.BAD_REQUEST);
+      throw new ApiException(ApiErrors.Reservations.SeatUnavailable);
     }
 
     if (
@@ -65,7 +61,7 @@ export class ReservationService {
       seat.reservedUntil &&
       new Date() < seat.reservedUntil
     ) {
-      throw new HttpException('Seat already reserved', HttpStatus.BAD_REQUEST);
+      throw new ApiException(ApiErrors.Reservations.SeatUnavailable);
     }
 
     seat.status = 'reserved';
@@ -88,10 +84,7 @@ export class ReservationService {
     const now = new Date();
 
     if (!this.seatReservations[date]) {
-      throw new HttpException(
-        'Invalid date or no reservations available',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new ApiException(ApiErrors.Reservations.DateUnavailable);
     }
 
     this.seatReservations[date] = this.seatReservations[date].map((seat) => {

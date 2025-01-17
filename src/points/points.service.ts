@@ -6,6 +6,8 @@ import {
   PointHistoryType,
 } from './entities/point-history.entity';
 import { Repository } from 'typeorm';
+import { ApiException } from 'src/common/exceptions/api-exception';
+import { ApiErrors } from 'src/common/errors/api-errors';
 
 @Injectable()
 export class PointsService {
@@ -25,7 +27,7 @@ export class PointsService {
     });
 
     if (!point) {
-      throw new BadRequestException('사용자를 찾을 수 없습니다');
+      throw new ApiException(ApiErrors.Users.NotFound);
     }
 
     point.balance += amount;
@@ -52,11 +54,11 @@ export class PointsService {
     });
 
     if (!point) {
-      throw new BadRequestException('사용자를 찾을 수 없습니다');
+      throw new ApiException(ApiErrors.Users.NotFound);
     }
 
     if (point.balance < amount) {
-      throw new BadRequestException('포인트 잔액이 부족합니다.');
+      throw new ApiException(ApiErrors.Point.BadRequest);
     }
 
     point.balance -= amount;
@@ -80,7 +82,7 @@ export class PointsService {
     });
 
     if (!point) {
-      throw new BadRequestException('사용자를 찾을 수 없습니다');
+      throw new ApiException(ApiErrors.Users.NotFound);
     }
 
     return { balance: point.balance };

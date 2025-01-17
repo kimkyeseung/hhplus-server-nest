@@ -1,6 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ReservationService } from '../reservation/reservation.service';
 import { QueueService } from '../queue/queue.service';
+import { ApiException } from '../common/exceptions/api-exception';
+import { ApiErrors } from '../common/errors/api-errors';
 
 @Injectable()
 export class PaymentsService {
@@ -17,12 +19,12 @@ export class PaymentsService {
     const seat = this.reservationService.reserveSeat(date, seatNumber);
 
     if (seat.status !== 'reserved') {
-      throw new HttpException('Seat is not reserved', HttpStatus.BAD_REQUEST);
+      throw new ApiException(ApiErrors.Payments.ProcessFailed);
     }
 
     const paymentSuccess = this.simulatePayment();
     if (!paymentSuccess) {
-      throw new HttpException('Payment failed', HttpStatus.PAYMENT_REQUIRED);
+      throw new ApiException(ApiErrors.Payments.ProcessFailed);
     }
 
     seat.status = 'reserved';
