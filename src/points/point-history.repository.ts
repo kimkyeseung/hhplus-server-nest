@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Queue } from './entities/queue.entity';
+import { PointHistory } from './entities/point-history.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class QueueRepository extends Repository<Queue> {
+export class PointHistoryRepository extends Repository<PointHistory> {
   constructor(
-    @InjectRepository(Queue)
-    repository: Repository<Queue>,
+    @InjectRepository(PointHistory)
+    repository: Repository<PointHistory>,
   ) {
     super(repository.target, repository.manager, repository.queryRunner);
   }

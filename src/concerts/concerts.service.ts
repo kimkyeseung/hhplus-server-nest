@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artist } from '../../src/artists/entities/artist.entity';
 import { Ticket } from '../../src/tickets/entities/ticket.entity';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class ConcertsService {
@@ -25,7 +27,7 @@ export class ConcertsService {
 
     const artist = this.artistRepository.findOne({ where: { id: artistId } });
     if (!artist) {
-      throw NotFoundException;
+      throw new ApiException(ApiErrors.Concerts.NotFound);
     }
 
     const concert = this.concertRepository.create(createConcertDto);

@@ -12,6 +12,10 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { PointModule } from './points/points.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { PaymentsModule } from './payments/payments.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { WinstonModule } from 'nest-winston';
+import { winstonLogger } from './utils/winston.config';
 
 @Module({
   imports: [
@@ -27,8 +31,14 @@ import { PaymentsModule } from './payments/payments.module';
     PointModule,
     ReservationModule,
     PaymentsModule,
+    WinstonModule.forRoot({ instance: winstonLogger }),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}

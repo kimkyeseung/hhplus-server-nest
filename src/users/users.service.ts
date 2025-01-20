@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +33,7 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new ApiException(ApiErrors.Users.NotFound);
     }
 
     await this.userRepository.update(id, updateUserDto);
@@ -42,7 +44,7 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new ApiException(ApiErrors.Users.NotFound);
     }
 
     return await this.userRepository.delete({ id });

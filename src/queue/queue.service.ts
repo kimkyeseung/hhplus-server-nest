@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Queue, QueueStatus } from './entities/queue.entity';
 import { Repository, LessThan } from 'typeorm';
+import { ApiException } from '../../src/common/exceptions/api-exception';
+import { ApiErrors } from '../../src/common/errors/api-errors';
 
 @Injectable()
 export class QueueService {
@@ -73,7 +75,7 @@ export class QueueService {
     });
 
     if (!queue) {
-      throw new Error('User not found in the queue');
+      throw new ApiException(ApiErrors.Queue.NotFound);
     }
 
     if (queue.status === QueueStatus.ACTIVE) {
@@ -91,8 +93,8 @@ export class QueueService {
 
     const userIndex = allQueues.findIndex((q) => q.user === userId);
 
-    if (userIndex === -1) {
-      throw new Error('User not found in the WAIT queue');
+    if (!queue) {
+      throw new ApiException(ApiErrors.Queue.NotFound);
     }
 
     const numberOfUsersAhead = userIndex;
@@ -133,7 +135,7 @@ export class QueueService {
     });
 
     if (!queue) {
-      throw new Error('User not found in the queue');
+      throw new ApiException(ApiErrors.Queue.NotFound);
     }
 
     await this.queueRepository.remove(queue); // 대기열에서 제거

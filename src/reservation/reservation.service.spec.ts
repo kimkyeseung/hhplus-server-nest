@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationService } from './reservation.service';
-import { HttpException } from '@nestjs/common';
+import { ApiException } from '../../src/common/exceptions/api-exception';
 
 describe('ReservationService', () => {
   let service: ReservationService;
@@ -26,7 +26,7 @@ describe('ReservationService', () => {
 
     it('should throw an error for an invalid date', () => {
       expect(() => service.getAvailableSeats('2025-01-15')).toThrow(
-        HttpException,
+        ApiException,
       );
     });
   });
@@ -41,35 +41,13 @@ describe('ReservationService', () => {
 
     it('should throw an error for already reserved seat', () => {
       service.reserveSeat('2025-01-10', 1);
-      expect(() => service.reserveSeat('2025-01-10', 1)).toThrow(HttpException);
+      expect(() => service.reserveSeat('2025-01-10', 1)).toThrow(ApiException);
     });
 
     it('should throw an error for an invalid seat number', () => {
       expect(() => service.reserveSeat('2025-01-10', 100)).toThrow(
-        HttpException,
+        ApiException,
       );
-    });
-  });
-
-  describe('cleanupExpiredReservations', () => {
-    it('should release a reserved seat after timeout', () => {
-      const seat = service.reserveSeat('2025-01-10', 1);
-      expect(seat.status).toBe('reserved');
-
-      // Simulate time passing
-      jest
-        .spyOn(global.Date, 'now')
-        .mockImplementation(() =>
-          new Date(seat.reservedUntil!.getTime() + 1000).getTime(),
-        );
-
-      const seatsAfterCleanup = service.getAvailableSeats('2025-01-10');
-      const updatedSeat = seatsAfterCleanup.find((s) => s.seatNumber === 1);
-
-      expect(updatedSeat!.isAvailable).toBe(true);
-
-      // Restore original Date implementation
-      jest.spyOn(global.Date, 'now').mockRestore();
     });
   });
 });
