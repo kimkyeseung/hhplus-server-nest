@@ -8,6 +8,7 @@ import {
 import { Repository } from 'typeorm';
 import { ApiException } from '../../src/common/exceptions/api-exception';
 import { ApiErrors } from '../../src/common/errors/api-errors';
+import { RedisService } from '../../src/redis/redis.service';
 
 @Injectable()
 export class PointsService {
@@ -16,6 +17,7 @@ export class PointsService {
     private readonly pointRepository: Repository<Point>,
     @InjectRepository(PointHistory)
     private readonly pointHistoryRepository: Repository<PointHistory>,
+    private readonly redisService: RedisService,
   ) {}
 
   async chargePoints(
@@ -77,9 +79,20 @@ export class PointsService {
   }
 
   async getPoints(userId: number): Promise<{ balance: number }> {
+    const cacheKey = `point:${userId}`;
+    const cachedPoint = await this.redisService.get(cacheKey);
+
+    if (cachedPoint) {
+      return JSON.parse(cachedPoint);
+    }
+
     const point = await this.pointRepository.findOne({
       where: { user: { id: userId } },
     });
+    
+    if (point) {
+      await this.redisService.set(cacheKey, JSON.stringify(point), 3600); // 캐시 TTL: 1시간
+    }
 
     if (!point) {
       throw new ApiException(ApiErrors.Users.NotFound);

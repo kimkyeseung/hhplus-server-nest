@@ -16,6 +16,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { WinstonModule } from 'nest-winston';
 import { winstonLogger } from './utils/winston.config';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
   imports: [
@@ -32,6 +33,14 @@ import { winstonLogger } from './utils/winston.config';
     ReservationModule,
     PaymentsModule,
     WinstonModule.forRoot({ instance: winstonLogger }),
+    RedisModule.forRoot({
+      readyLog: true,
+      config: {
+        host: 'mysql',
+        port: 3306,
+        password: 'pw',
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
