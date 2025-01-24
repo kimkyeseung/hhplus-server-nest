@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
+    "@liaoliaots/nestjs-redis": "^10.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
     "@nestjs/core": "^10.0.0",
@@ -32,6 +33,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "axios": "^1.7.9",
     "class-validator": "^0.14.1",
+    "ioredis": "^5.4.2",
     "moment-timezone": "^0.5.46",
     "mysql2": "^3.9.2",
     "nest-winston": "^1.10.1",
