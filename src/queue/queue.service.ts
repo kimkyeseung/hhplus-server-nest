@@ -1,143 +1,61 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Queue, QueueStatus } from './entities/queue.entity';
-import { Repository, LessThan } from 'typeorm';
-import { ApiException } from '../../src/common/exceptions/api-exception';
-import { ApiErrors } from '../../src/common/errors/api-errors';
+import { createClient } from 'redis';
 
 @Injectable()
 export class QueueService {
-  constructor(
-    @InjectRepository(Queue)
-    private readonly queueRepository: Repository<Queue>,
-  ) {}
+  private readonly redisClient;
+  private readonly queueName = 'user_queue';
 
-  private readonly processingRate = 2; // 초당 처리 가능한 사용자 수
-  private readonly averageProcessingTime = 30; // 사용자당 처리 시간 (초)
-
-  async addToQueue(userId: number): Promise<Queue> {
-    const newQueueItem = this.queueRepository.create({
-      user: userId,
-      status: QueueStatus.WAIT,
-    });
-
-    return this.queueRepository.save(newQueueItem);
+  constructor() {
+    this.redisClient = createClient();
+    this.redisClient.connect();
   }
 
-  async activateQueue(batchSize: number): Promise<Queue[]> {
-    const tasksToActivate = await this.queueRepository.find({
-      where: { status: QueueStatus.WAIT },
-      order: { createdAt: 'ASC' },
-      take: batchSize,
-    });
-
-    for (const task of tasksToActivate) {
-      task.status = QueueStatus.ACTIVE;
-      await this.queueRepository.save(task);
-    }
-
-    return tasksToActivate;
+  /** 사용자 대기열 추가 **/
+  async addToQueue(userId: number): Promise<void> {
+    const timestamp = Date.now();
+    await this.redisClient.zAdd(this.queueName, [
+      { score: timestamp, value: userId.toString() },
+    ]);
   }
 
-  async processExpiredQueues(): Promise<void> {
-    const now = new Date();
-    const expiredQueues = await this.queueRepository.find({
-      where: { expiresAt: LessThan(now), status: QueueStatus.ACTIVE },
-    });
-
-    const expiredCount = expiredQueues.length;
-
-    if (expiredCount > 0) {
-      await this.queueRepository.remove(expiredQueues);
-
-      const waitingQueues = await this.queueRepository.find({
-        where: { status: QueueStatus.WAIT },
-        order: { createdAt: 'ASC' },
-        take: expiredCount,
-      });
-
-      for (const queue of waitingQueues) {
-        queue.status = QueueStatus.ACTIVE;
-        queue.expiresAt = new Date(new Date().getTime() + 5 * 60 * 1000);
-      }
-
-      await this.queueRepository.save(waitingQueues);
-    }
-  }
-
-  async getUserQueueStatus(userId: number): Promise<{
-    status: QueueStatus;
-    estimatedTime: number | null;
-    numberOfUsersAhead: number | null;
-  }> {
-    const queue = await this.queueRepository.findOne({
-      where: { user: userId },
-    });
-
-    if (!queue) {
-      throw new ApiException(ApiErrors.Queue.NotFound);
-    }
-
-    if (queue.status === QueueStatus.ACTIVE) {
-      return {
-        status: QueueStatus.ACTIVE,
-        estimatedTime: null,
-        numberOfUsersAhead: null,
-      };
-    }
-
-    const allQueues = await this.queueRepository.find({
-      where: { status: QueueStatus.WAIT },
-      order: { createdAt: 'ASC' },
-    });
-
-    const userIndex = allQueues.findIndex((q) => q.user === userId);
-
-    if (!queue) {
-      throw new ApiException(ApiErrors.Queue.NotFound);
-    }
-
-    const numberOfUsersAhead = userIndex;
-
-    const estimatedTime = this.calculateEstimatedTime(
-      numberOfUsersAhead,
-      this.processingRate,
-      this.averageProcessingTime,
+  /** 사용자 대기 순번 조회 **/
+  async getQueuePosition(userId: number): Promise<number | null> {
+    const position = await this.redisClient.zRank(
+      this.queueName,
+      userId.toString(),
     );
-
-    return {
-      status: QueueStatus.WAIT,
-      estimatedTime: Math.ceil(estimatedTime),
-      numberOfUsersAhead,
-    };
+    return position !== null ? position + 1 : null;
   }
 
-  // 대기열의 예상시간 및 대기자 수 계산
-  private calculateEstimatedTime(
-    numberOfUsersAhead: number,
-    processingRate: number,
-    averageProcessingTime: number,
-  ): number {
-    return Math.ceil(
-      (numberOfUsersAhead / processingRate) * averageProcessingTime,
+  /** 대기열 상태 조회 **/
+  async getUserQueueStatus(
+    userId: number,
+  ): Promise<{ position: number | null }> {
+    const position = await this.getQueuePosition(userId);
+    return { position };
+  }
+
+  /** 대기열 활성화 (일정 수의 사용자 처리) **/
+  async activateQueue(batchSize: number): Promise<number[]> {
+    const users = await this.redisClient.zRange(
+      this.queueName,
+      0,
+      batchSize - 1,
     );
-  }
-
-  async getQueue(userId: number): Promise<Queue | null> {
-    return await this.queueRepository.findOneBy({
-      user: userId,
-    });
-  }
-
-  async expireToken(userId: number): Promise<void> {
-    const queue = await this.queueRepository.findOne({
-      where: { user: userId },
-    });
-
-    if (!queue) {
-      throw new ApiException(ApiErrors.Queue.NotFound);
+    if (users.length > 0) {
+      await this.redisClient.zRem(this.queueName, users);
     }
+    return users.map((id) => parseInt(id));
+  }
 
-    await this.queueRepository.remove(queue); // 대기열에서 제거
+  /** 만료된 사용자 제거 **/
+  async removeExpiredUsers(expirationTime: number): Promise<void> {
+    const expiredTimestamp = Date.now() - expirationTime;
+    await this.redisClient.zRemRangeByScore(
+      this.queueName,
+      0,
+      expiredTimestamp,
+    );
   }
 }
