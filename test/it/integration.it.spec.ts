@@ -11,7 +11,11 @@ import { Repository } from 'typeorm';
 import { UsersRepository } from '../../src/users/users.repository';
 import { UsersModule } from '../../src/users/users.module';
 import { ScheduleRepository } from '../../src/schedules/schedules.repository';
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from '../../src/orders/entities/order.entity';
+import { OrdersModule } from '../../src/orders/orders.module';
+import { TicketsModule } from '../../src/tickets/tickets.module';
+import { ConcertsModule } from '../../src/concerts/concerts.module';
+import { AppModule } from '../../src/app.module';
 
 describe('Integration Test', () => {
   let paymentService: PaymentsService;
@@ -22,10 +26,12 @@ describe('Integration Test', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        AppModule,
         DatabaseModule,
         UsersModule,
-        ScheduleRepository,
-        ScheduleRepository,
+        OrdersModule,
+        TicketsModule,
+        ConcertsModule,
         TypeOrmModule.forFeature([Queue, User, Point, Order]),
       ],
       providers: [
@@ -33,6 +39,7 @@ describe('Integration Test', () => {
         QueueService,
         ReservationService,
         UsersRepository,
+        ScheduleRepository,
       ],
     }).compile();
 
@@ -49,11 +56,11 @@ describe('Integration Test', () => {
   });
 
   it('should work', () => {
-    // userRepository.find().then((users) => {
-    //   console.log('users');
-    //   console.log(users);
-    //   expect(users).toHaveLength(1);
-    // });
+    usersRepository.find().then((users) => {
+      console.log('users');
+      console.log(users);
+      expect(users).toHaveLength(1);
+    });
     expect(1).toBe(1);
   });
 
