@@ -1,21 +1,47 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { QueueService } from './queue.service';
+import { createClient } from 'redis';
 
 @Injectable()
 export class QueueScheduler {
-  private readonly logger = new Logger(QueueScheduler.name);
+  private readonly redisClient;
+  private readonly queueName = 'user_queue';
+  private readonly batchSize = 5;
+  private readonly expirationTime = 60000;
 
-  constructor(private readonly queueService: QueueService) {}
+  constructor() {
+    this.redisClient = createClient();
+    this.redisClient.connect();
+  }
+
+  @Cron('*/10 * * * * *')
+  async autoActivateQueue() {
+    await this.activateQueue();
+  }
 
   @Cron('*/30 * * * * *')
-  async handleExpiredQueues() {
-    this.logger.log('Processing expired queues...');
-    try {
-      await this.queueService.processExpiredQueues();
-      this.logger.log('Expired queues processed successfully.');
-    } catch (error) {
-      this.logger.error('Error processing expired queues', error.stack);
+  async autoRemoveExpiredUsers() {
+    await this.removeExpiredUsers();
+  }
+
+  async activateQueue(): Promise<number[]> {
+    const users = await this.redisClient.zRange(
+      this.queueName,
+      0,
+      this.batchSize - 1,
+    );
+    if (users.length > 0) {
+      await this.redisClient.zRem(this.queueName, users);
     }
+    return users.map((id) => parseInt(id));
+  }
+
+  async removeExpiredUsers(): Promise<void> {
+    const expiredTimestamp = Date.now() - this.expirationTime;
+    await this.redisClient.zRemRangeByScore(
+      this.queueName,
+      0,
+      expiredTimestamp,
+    );
   }
 }
